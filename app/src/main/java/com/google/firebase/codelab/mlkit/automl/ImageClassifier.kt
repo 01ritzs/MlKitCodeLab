@@ -108,7 +108,7 @@ internal constructor(context: Context) {
 
     return labeler.processImage(image).continueWith { task ->
       val endTime = SystemClock.uptimeMillis()
-      Log.d(TAG, "Time to run model inference: " + java.lang.Long.toString(endTime - startTime))
+      Log.d(TAG, "Time to run model inference: " + (endTime - startTime).toString())
 
       val labelProbList = task.result
 
@@ -121,7 +121,7 @@ internal constructor(context: Context) {
       var textToShow = "Source: " +
         (if (this.remoteModelDownloadSucceeded) "Remote" else "Local") +
         " model\n"
-      textToShow += "Latency: " + java.lang.Long.toString(endTime - startTime) + "ms\n"
+      textToShow += "Latency: " + (endTime - startTime).toString() + "ms\n"
       textToShow += if (labelProbList.isNullOrEmpty())
         "No Result"
       else

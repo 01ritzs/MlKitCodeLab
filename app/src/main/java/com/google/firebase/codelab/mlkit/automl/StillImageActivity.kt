@@ -16,6 +16,7 @@
 
 package com.google.firebase.codelab.mlkit.automl
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -76,6 +77,7 @@ class StillImageActivity : BaseActivity() {
   }
 
   /** Create a file to pass to camera app */
+  @SuppressLint("SimpleDateFormat")
   @Throws(IOException::class)
   private fun createImageFile(): File {
     // Create an image file name
@@ -144,6 +146,7 @@ class StillImageActivity : BaseActivity() {
     startActivityForResult(intent, REQUEST_PHOTO_LIBRARY)
   }
 
+  @SuppressLint("QueryPermissionsNeeded")
   private fun takePhoto() {
     Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
       // Ensure that there's a camera activity to handle the intent.

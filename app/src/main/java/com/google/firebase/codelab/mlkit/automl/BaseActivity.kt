@@ -53,14 +53,14 @@ abstract class BaseActivity : AppCompatActivity(),
   }
 
   private fun isPermissionGranted(permission: String): Boolean {
-    when (ContextCompat.checkSelfPermission(this, permission)) {
+    return when (ContextCompat.checkSelfPermission(this, permission)) {
       PackageManager.PERMISSION_GRANTED -> {
         Log.i(TAG, "Permission granted: $permission")
-        return true
+        true
       }
       else -> {
         Log.i(TAG, "Permission NOT granted: $permission")
-        return false
+        false
       }
     }
   }
@@ -79,6 +79,5 @@ abstract class BaseActivity : AppCompatActivity(),
     private const val TAG = "BaseActivity"
 
     private const val PERMISSION_REQUESTS = 1
-
   }
 }
