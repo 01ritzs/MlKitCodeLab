@@ -48,46 +48,46 @@ internal constructor(context: Context) {
   init {
     val remoteModel = FirebaseRemoteModel.Builder(REMOTE_MODEL_NAME).build()
     FirebaseModelManager.getInstance()
-            .registerRemoteModel(remoteModel)
+      .registerRemoteModel(remoteModel)
 
     FirebaseModelManager.getInstance()
-            .registerLocalModel(
-                    FirebaseLocalModel.Builder(LOCAL_MODEL_NAME)
-                            .setAssetFilePath(LOCAL_MODEL_PATH)
-                            .build()
-            )
+      .registerLocalModel(
+        FirebaseLocalModel.Builder(LOCAL_MODEL_NAME)
+          .setAssetFilePath(LOCAL_MODEL_PATH)
+          .build()
+      )
 
     val options = FirebaseVisionOnDeviceAutoMLImageLabelerOptions.Builder()
-            .setConfidenceThreshold(CONFIDENCE_THRESHOLD)
-            .setLocalModelName(LOCAL_MODEL_NAME)
-            .setRemoteModelName(REMOTE_MODEL_NAME)
-            .build()
+      .setConfidenceThreshold(CONFIDENCE_THRESHOLD)
+      .setLocalModelName(LOCAL_MODEL_NAME)
+      .setRemoteModelName(REMOTE_MODEL_NAME)
+      .build()
 
     labeler = FirebaseVision.getInstance().getOnDeviceAutoMLImageLabeler(options)
 
     Toast.makeText(
-            context,
-            "Begin downloading the remote AutoML model.",
-            Toast.LENGTH_SHORT
+      context,
+      "Begin downloading the remote AutoML model.",
+      Toast.LENGTH_SHORT
     ).show()
 
     // Track the remote model download progress.
     FirebaseModelManager.getInstance()
-            .downloadRemoteModelIfNeeded(remoteModel)
-            .addOnCompleteListener { task ->
-              if (task.isSuccessful) {
-                Toast.makeText(
-                        context,
-                        "Download remote AutoML model success.",
-                        Toast.LENGTH_SHORT
-                ).show()
-                remoteModelDownloadSucceeded = true
-              } else {
-                val downloadingError = "Error downloading remote model."
-                Log.e(TAG, downloadingError, task.exception)
-                Toast.makeText(context, downloadingError, Toast.LENGTH_SHORT).show()
-              }
-            }
+      .downloadRemoteModelIfNeeded(remoteModel)
+      .addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+          Toast.makeText(
+            context,
+            "Download remote AutoML model success.",
+            Toast.LENGTH_SHORT
+          ).show()
+          remoteModelDownloadSucceeded = true
+        } else {
+          val downloadingError = "Error downloading remote model."
+          Log.e(TAG, downloadingError, task.exception)
+          Toast.makeText(context, downloadingError, Toast.LENGTH_SHORT).show()
+        }
+      }
 
     Log.d(TAG, "Created a Firebase ML Kit AutoML Image Labeler.")
   }
@@ -119,8 +119,8 @@ internal constructor(context: Context) {
       // triggered in the background during inference, it is possible that a remote model is used
       // even if the first download fails.
       var textToShow = "Source: " +
-              (if (this.remoteModelDownloadSucceeded) "Remote" else "Local") +
-              " model\n"
+        (if (this.remoteModelDownloadSucceeded) "Remote" else "Local") +
+        " model\n"
       textToShow += "Latency: " + java.lang.Long.toString(endTime - startTime) + "ms\n"
       textToShow += if (labelProbList.isNullOrEmpty())
         "No Result"
@@ -139,16 +139,20 @@ internal constructor(context: Context) {
     } catch (e: IOException) {
       Log.e(TAG, "Unable to close the labeler instance", e)
     }
-
   }
 
   /** Prints top-K labels, to be shown in UI as the results.  */
   private val printTopKLabels: (List<FirebaseVisionImageLabel>) -> String = {
     it.joinToString(
-            separator = "\n",
-            limit = RESULTS_TO_SHOW
+      separator = "\n",
+      limit = RESULTS_TO_SHOW
     ) { label ->
-      String.format(Locale.getDefault(), "Label: %s, Confidence: %4.2f", label.text, label.confidence)
+      String.format(
+        Locale.getDefault(),
+        "Label: %s, Confidence: %4.2f",
+        label.text,
+        label.confidence
+      )
     }
   }
 

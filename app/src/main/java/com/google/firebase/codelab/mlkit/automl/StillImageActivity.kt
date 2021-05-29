@@ -28,7 +28,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.google.firebase.ml.common.FirebaseMLException
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -83,9 +82,9 @@ class StillImageActivity : BaseActivity() {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
     val storageDir = cacheDir
     return createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
+      "JPEG_${timeStamp}_", /* prefix */
+      ".jpg", /* suffix */
+      storageDir /* directory */
     ).apply {
       // Save a file: path for use with ACTION_VIEW intents.
       currentPhotoFile = this
@@ -123,16 +122,15 @@ class StillImageActivity : BaseActivity() {
     imagePreview?.setImageBitmap(bitmap)
 
     // Classify image.
-    classifier?.classifyFrame(bitmap)?.
-      addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-          textView?.text = task.result
-        } else {
-          val e = task.exception
-          Log.e(TAG, "Error classifying frame", e)
-          textView?.text = e?.message
-        }
+    classifier?.classifyFrame(bitmap)?.addOnCompleteListener { task ->
+      if (task.isSuccessful) {
+        textView?.text = task.result
+      } else {
+        val e = task.exception
+        Log.e(TAG, "Error classifying frame", e)
+        textView?.text = e?.message
       }
+    }
   }
 
   private fun chooseFromLibrary() {
@@ -174,7 +172,9 @@ class StillImageActivity : BaseActivity() {
 
   private fun clickNextImage() {
     val imageList = bundledImageList
-    if (imageList.isNullOrEmpty()) { return }
+    if (imageList.isNullOrEmpty()) {
+      return
+    }
 
     currentImageIndex = (currentImageIndex + 1) % imageList.size
     classifyBundledImage(currentImageIndex)
@@ -182,7 +182,9 @@ class StillImageActivity : BaseActivity() {
 
   private fun classifyBundledImage(index: Int) {
     val imageList = bundledImageList
-    if (imageList.isNullOrEmpty()) { return }
+    if (imageList.isNullOrEmpty()) {
+      return
+    }
 
     val imageName = imageList[index]
     val drawableId = resources.getIdentifier(imageName, "drawable", packageName)
@@ -201,6 +203,5 @@ class StillImageActivity : BaseActivity() {
 
     /** Request code for starting photo library activity  */
     private const val REQUEST_PHOTO_LIBRARY = 2
-
   }
 }
